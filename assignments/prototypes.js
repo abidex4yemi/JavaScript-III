@@ -51,8 +51,8 @@ CharacterStats.prototype.takeDamage = function() {
   * should inherit destroy() from GameObject through CharacterStats
   * should inherit takeDamage() from CharacterStats
 */
-function Humanoid({ createdAt, name, dimensions, team, weapons, language }) {
-	CharacterStats.call(this, { createdAt, name, dimensions });
+function Humanoid({ createdAt, name, dimensions, team, weapons, language, healthPoints }) {
+	CharacterStats.call(this, { createdAt, name, dimensions, healthPoints });
 
 	this.team = team;
 	this.weapons = weapons;
@@ -128,5 +128,57 @@ console.log(swordsman.destroy()); // Sir Mustachio was removed from the game.
 
 // Stretch task:
 // * Create Villain and Hero constructor functions that inherit from the Humanoid constructor function.
-// * Give the Hero and Villains different methods that could be used to remove health points from objects which could result in destruction if health gets to 0 or drops below 0;
+function Villain({ createdAt, name, dimensions, team, weapons, language, healthPoints }) {
+	Humanoid.call(this, { createdAt, name, dimensions, team, weapons, language, healthPoints });
+}
+
+Humanoid.prototype = Object.create(Humanoid.prototype);
+
+function Hero({ createdAt, name, dimensions, team, weapons, language }) {
+	Humanoid.call(this, { createdAt, name, dimensions, team, weapons, language });
+}
+// * Give the Hero and Villains different methods that could be used to remove health points ///from objects which could result in destruction if health gets to 0 or drops below 0;
+CharacterStats.prototype.removeHealthPoint = function() {
+	if (this.healthPoints === 0) {
+		return `Game over ${this.name} won the game!!!`;
+	}
+
+	this.healthPoints--;
+	return `Total remaining health points: ${this.healthPoints}`;
+};
+
 // * Create two new objects, one a villain and one a hero and fight it out with methods!
+const villain = new Humanoid({
+	createdAt: new Date(),
+	dimensions: {
+		length: 1,
+		width: 2,
+		height: 4
+	},
+	healthPoints: 3,
+	name: 'Lilith',
+	team: 'Forest Kingdom',
+	weapons: ['Bow', 'Dagger'],
+	language: 'Swahili'
+});
+
+const hero = new Humanoid({
+	createdAt: new Date(),
+	dimensions: {
+		length: 1,
+		width: 2,
+		height: 4
+	},
+	healthPoints: 2,
+	name: 'Lilith',
+	team: 'Forest Kingdom',
+	weapons: ['Bow', 'Dagger'],
+	language: 'Elvish'
+});
+
+console.log(villain.removeHealthPoint());
+console.log(hero.removeHealthPoint());
+console.log(villain.removeHealthPoint());
+console.log(hero.removeHealthPoint());
+console.log(villain.removeHealthPoint());
+console.log(hero.removeHealthPoint());
